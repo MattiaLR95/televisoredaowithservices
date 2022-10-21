@@ -62,4 +62,12 @@ public class Televisore {
 		this.dataProduzione = dataProduzione;
 	}
 
+	@Override
+	public String toString() {
+		return "Televisore [id=" + id + ", marca=" + marca + ", modello=" + modello + ", pollici=" + pollici
+				+ ", dataProduzione=" + dataProduzione + "]";
+	}
+	
+	
+
 }
