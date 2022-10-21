@@ -80,7 +80,7 @@ public class TelevisoreDAOImpl extends AbstractMySQLDAO implements TelevisoreDAO
 
 		int result = 0;
 		try (PreparedStatement ps = connection
-				.prepareStatement("UPDATE user SET marca=?, modello=?, pollici=?, dataproduzione=? where id=?;")) {
+				.prepareStatement("UPDATE televisore SET marca=?, modello=?, pollici=?, dataproduzione=? where id=?;")) {
 			ps.setString(1, input.getMarca());
 			ps.setString(2, input.getModello());
 			ps.setInt(3, input.getPollici());
@@ -104,7 +104,7 @@ public class TelevisoreDAOImpl extends AbstractMySQLDAO implements TelevisoreDAO
 
 		int result = 0;
 		try (PreparedStatement ps = connection
-				.prepareStatement("INSERT INTO user (marca, modello, pollici, dataproduzione) VALUES (?, ?, ?, ?);")) {
+				.prepareStatement("INSERT INTO televisore (marca, modello, pollici, dataproduzione) VALUES (?, ?, ?, ?);")) {
 			ps.setString(1, input.getMarca());
 			ps.setString(2, input.getModello());
 			ps.setInt(3, input.getPollici());
@@ -126,7 +126,7 @@ public class TelevisoreDAOImpl extends AbstractMySQLDAO implements TelevisoreDAO
 			throw new Exception("Valore di input non ammesso.");
 
 		int result = 0;
-		try (PreparedStatement ps = connection.prepareStatement("DELETE FROM user WHERE ID=?")) {
+		try (PreparedStatement ps = connection.prepareStatement("DELETE FROM televisore WHERE ID=?")) {
 			ps.setLong(1, input.getId());
 			result = ps.executeUpdate();
 		} catch (Exception e) {
