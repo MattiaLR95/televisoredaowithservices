@@ -11,6 +11,8 @@ public interface TelevisoreService {
 	public void setTelevisoreDao(TelevisoreDAO televisoreDao);
 
 	public List<Televisore> list() throws Exception;
+	
+	public Televisore findById(Long idInput) throws Exception;
 
 	public Televisore get(Long idInput) throws Exception;
 
@@ -19,11 +21,13 @@ public interface TelevisoreService {
 	public int insert(Televisore input) throws Exception;
 
 	public int delete(Televisore input) throws Exception;
+	
+	public List<Televisore> findByExample(Televisore input) throws Exception;
 
 	public List<Televisore> trovaTelevisioniTraDate(Date primo, Date secondo) throws Exception;
 
 	public Televisore trovaTelevisionePiuGrande() throws Exception;
 
-	public List<Televisore> nomeMarcheUltimiSeiMesi(Date input) throws Exception;
+	public List<String> nomeMarcheUltimiSeiMesi(Date input) throws Exception;
 
 }

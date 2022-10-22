@@ -21,8 +21,12 @@ public class Televisore {
 		this.pollici = pollici;
 		this.dataProduzione = dataProduzione;
 	}
-	
-	
+
+	public Televisore(String marca, String modello) {
+		super();
+		this.marca = marca;
+		this.modello = modello;
+	}
 
 	public Televisore(String marca, String modello, int pollici, Date dataProduzione) {
 		super();
@@ -77,7 +81,5 @@ public class Televisore {
 		return "Televisore [id=" + id + ", marca=" + marca + ", modello=" + modello + ", pollici=" + pollici
 				+ ", dataProduzione=" + dataProduzione + "]";
 	}
-	
-	
 
 }

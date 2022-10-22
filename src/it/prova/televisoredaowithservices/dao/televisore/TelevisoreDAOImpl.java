@@ -47,7 +47,7 @@ public class TelevisoreDAOImpl extends AbstractMySQLDAO implements TelevisoreDAO
 			throw new Exception("Valore di input non ammesso.");
 
 		Televisore result = null;
-		try (PreparedStatement ps = connection.prepareStatement("select * from user where id=?")) {
+		try (PreparedStatement ps = connection.prepareStatement("select * from televisore where id=?")) {
 
 			ps.setLong(1, idInput);
 			try (ResultSet rs = ps.executeQuery()) {
@@ -180,7 +180,7 @@ public class TelevisoreDAOImpl extends AbstractMySQLDAO implements TelevisoreDAO
 			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
 		Televisore result = null;
 		try (Statement s = connection.createStatement();
-				ResultSet rs = s.executeQuery("select max(pollici) from televisore;")) {
+				ResultSet rs = s.executeQuery("select * from televisore order by pollici desc limit 1;")) {
 			if (rs.next()) {
 				result = new Televisore();
 				result.setId(rs.getLong("id"));
@@ -197,13 +197,13 @@ public class TelevisoreDAOImpl extends AbstractMySQLDAO implements TelevisoreDAO
 	}
 
 	@Override
-	public List<Televisore> brandsNameLastSixMonth(Date input) throws Exception {
+	public List<String> brandsNameLastSixMonth(Date input) throws Exception {
 		if (isNotActive())
 			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
 		if (input.equals(null))
 			throw new Exception("Attenzione! Parametro inserito errato");
 
-		List<Televisore> result = new ArrayList<>();
+		List<String> result = new ArrayList<>();
 		Televisore temp = null;
 		try (PreparedStatement ps = connection
 				.prepareStatement("select marca from televisore where dataproduzione > ?;")) {
@@ -211,15 +211,57 @@ public class TelevisoreDAOImpl extends AbstractMySQLDAO implements TelevisoreDAO
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					temp = new Televisore();
-					temp.setId(rs.getLong("id"));
 					temp.setMarca(rs.getString("marca"));
-					temp.setModello(rs.getString("modello"));
-					temp.setPollici(rs.getInt("pollici"));
-					temp.setDataProduzione(rs.getDate("dataproduzione"));
-					result.add(temp);
+					result.add(temp.getMarca());
 				}
 			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;
+	}
+	
+	public List<Televisore> findByExample(Televisore example) throws Exception {
+		// prima di tutto cerchiamo di capire se possiamo effettuare le operazioni
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+
+		if (example == null)
+			throw new Exception("Valore di input non ammesso.");
+
+		ArrayList<Televisore> result = new ArrayList<>();
+
+		String query = "select * from televisore where 1=1 ";
+		if (example.getMarca() != null && !example.getMarca().isEmpty()) {
+			query += " and marca like '" + example.getMarca() + "%' ";
+		}
+
+		if (example.getModello() != null && !example.getModello().isEmpty()) {
+			query += " and modello like '" + example.getModello() + "%' ";
+		}
+
+		if (example.getPollici() != 0) {
+			query += " and pollici = '" + example.getPollici()+"' ";
+		}
+
+		if (example.getDataProduzione() != null) {
+			query += " and dataproduzione='" + new java.sql.Date(example.getDataProduzione().getTime()) + "' ";
+		}
+
+		try (Statement ps = connection.createStatement()) {
+			ResultSet rs = ps.executeQuery(query);
+
+			while (rs.next()) {
+				Televisore televisoreTemp = new Televisore();
+				televisoreTemp.setMarca(rs.getString("marca"));
+				televisoreTemp.setModello(rs.getString("modello"));
+				televisoreTemp.setPollici(rs.getInt("pollici"));
+				televisoreTemp.setDataProduzione(rs.getDate("dataproduzione"));
+				televisoreTemp.setId(rs.getLong("ID"));
+				result.add(televisoreTemp);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

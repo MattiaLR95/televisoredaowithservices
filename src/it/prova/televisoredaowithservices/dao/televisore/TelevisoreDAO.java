@@ -11,5 +11,5 @@ public interface TelevisoreDAO extends IBaseDAO<Televisore> {
 
 	public Televisore findTelevisionBigger() throws Exception;
 
-	public List<Televisore> brandsNameLastSixMonth(Date input) throws Exception;
+	public List<String> brandsNameLastSixMonth(Date input) throws Exception;
 }

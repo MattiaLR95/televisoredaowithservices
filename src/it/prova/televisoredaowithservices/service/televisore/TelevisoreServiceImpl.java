@@ -146,8 +146,8 @@ public class TelevisoreServiceImpl implements TelevisoreService {
 	}
 
 	@Override
-	public List<Televisore> nomeMarcheUltimiSeiMesi(Date input) throws Exception {
-		List<Televisore> result = new ArrayList<>();
+	public List<String> nomeMarcheUltimiSeiMesi(Date input) throws Exception {
+		List<String> result = new ArrayList<>();
 		try (Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
 
 			// inietto la connection nel dao
@@ -156,6 +156,34 @@ public class TelevisoreServiceImpl implements TelevisoreService {
 			// eseguo quello che realmente devo fare
 			result = televisoreDao.brandsNameLastSixMonth(input);
 
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;
+	}
+	
+	public Televisore findById(Long idInput) throws Exception {
+		Televisore result = null;
+		try (Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+
+			televisoreDao.setConnection(connection);
+
+			result = televisoreDao.get(idInput);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;
+	}
+	
+	public List<Televisore> findByExample(Televisore input) throws Exception {
+		List<Televisore> result = new ArrayList<>();
+		try (Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+
+			televisoreDao.setConnection(connection);
+
+			result = televisoreDao.findByExample(input);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
